@@ -1,0 +1,607 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.7.2 (swiftlang-5.7.2.135.5 clang-1400.0.29.51)
+// swift-module-flags: -target arm64-apple-ios10.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -Onone -module-name QRTCRoomClient
+// swift-module-flags-ignorable: -enable-bare-slash-regex
+import Accelerate
+import Foundation
+import Hydra
+@_exported import QRTCRoomClient
+import QRTCSDK
+import ReplayKit
+import Starscream
+import Swift
+import SwiftyJSON
+import UIKit
+import _Concurrency
+import _StringProcessing
+@objc @_inheritsConvenienceInitializers public class BroadcastScreenCapturer : QRTCSDK.RTCVideoCapturer {
+  public static let shared: QRTCRoomClient.BroadcastScreenCapturer
+  public func pushFrame(buffer: CoreVideo.CVPixelBuffer, timestamp: CoreMedia.CMTime, rotation: Swift.Int, size: CoreFoundation.CGSize)
+  @objc override dynamic public init(delegate: QRTCSDK.RTCVideoCapturerDelegate)
+  @objc override dynamic public init()
+  @objc deinit
+}
+public protocol Event {
+  var rawValue: Swift.String { get }
+}
+public protocol EventEmitter {
+  var listeners: [Swift.String : [Any]] { get set }
+  mutating func on(_ event: QRTCRoomClient.Event, action: @escaping (() -> ()))
+  mutating func on(_ events: [QRTCRoomClient.Event], action: @escaping (() -> ()))
+  mutating func on<T>(_ event: QRTCRoomClient.Event, action: @escaping ((T?) -> ()))
+  mutating func on<T>(_ events: [QRTCRoomClient.Event], action: @escaping ((T?) -> ()))
+  mutating func emit(_ event: QRTCRoomClient.Event, information: Any)
+  mutating func emit(_ event: QRTCRoomClient.Event)
+  mutating func removeListeners(_ event: QRTCRoomClient.Event?)
+}
+extension Swift.String : QRTCRoomClient.Event {
+  public var rawValue: Swift.String {
+    get
+  }
+}
+extension QRTCRoomClient.EventEmitter {
+  public mutating func on(_ event: QRTCRoomClient.Event, action: @escaping (() -> ()))
+  public mutating func on(_ events: [QRTCRoomClient.Event], action: @escaping (() -> ()))
+  public mutating func on<T>(_ event: QRTCRoomClient.Event, action: @escaping ((T?) -> ()))
+  public mutating func on<T>(_ events: [QRTCRoomClient.Event], action: @escaping ((T?) -> ()))
+  public mutating func removeListeners(_ event: QRTCRoomClient.Event? = nil)
+  public mutating func emit(_ event: QRTCRoomClient.Event)
+  public mutating func emit<T>(_ event: QRTCRoomClient.Event, information: T)
+}
+extension QRTCRoomClient.EventEmitter where Self : AnyObject {
+  public func emit(_ event: QRTCRoomClient.Event)
+  public func emit<T>(_ event: QRTCRoomClient.Event, information: T)
+}
+extension QRTCRoomClient.EventEmitter where Self : AnyObject {
+  public func emit<T>(onMain event: QRTCRoomClient.Event, information: T)
+  public func emit(onMain event: QRTCRoomClient.Event)
+}
+extension QRTCRoomClient.EventEmitter where Self : AnyObject {
+  public func emit<T>(on queue: Dispatch.DispatchQueue, event: QRTCRoomClient.Event, information: T)
+  public func emit(on queue: Dispatch.DispatchQueue, event: QRTCRoomClient.Event)
+}
+extension QRTCRoomClient.EventEmitter {
+  public mutating func forward<Emitter>(_ event: QRTCRoomClient.Event, to forwardingEvent: QRTCRoomClient.Event, by host: inout Emitter) where Emitter : AnyObject, Emitter : QRTCRoomClient.EventEmitter
+  public mutating func forward<Emitter>(_ events: [QRTCRoomClient.Event], to forwardingEvent: QRTCRoomClient.Event, by host: inout Emitter) where Emitter : AnyObject, Emitter : QRTCRoomClient.EventEmitter
+  public mutating func forward<Emitter>(_ event: QRTCRoomClient.Event, to forwardingEvents: [QRTCRoomClient.Event], by host: inout Emitter) where Emitter : AnyObject, Emitter : QRTCRoomClient.EventEmitter
+  public mutating func forward<Emitter>(_ events: [QRTCRoomClient.Event], to forwardingEvents: [QRTCRoomClient.Event], by host: inout Emitter) where Emitter : AnyObject, Emitter : QRTCRoomClient.EventEmitter
+}
+extension QRTCRoomClient.EventEmitter {
+  public mutating func once(_ event: QRTCRoomClient.Event, action: @escaping (() -> ()))
+  public mutating func once<T>(_ event: QRTCRoomClient.Event, action: @escaping ((T?) -> ()))
+  public mutating func once(_ event: QRTCRoomClient.Event, action: @escaping (() -> ()), when: @escaping (() -> Swift.Bool))
+  public mutating func once<T>(_ event: QRTCRoomClient.Event, action: @escaping ((T?) -> ()), when: @escaping (() -> Swift.Bool))
+}
+@objc @_hasMissingDesignatedInitializers public class GCDTimer : ObjectiveC.NSObject {
+  public enum GCDTimerState {
+    case register
+    case excuting
+    case pause
+    case cancel
+    public static func == (a: QRTCRoomClient.GCDTimer.GCDTimerState, b: QRTCRoomClient.GCDTimer.GCDTimerState) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public var identifier: Swift.String?
+  public var observer: ((QRTCRoomClient.GCDTimer, QRTCRoomClient.GCDTimer.GCDTimerState) -> Swift.Void)?
+  public var isBackgroundMode: Swift.Bool {
+    get
+    set
+  }
+  public class func once(after: Swift.Double, handler: ((QRTCRoomClient.GCDTimer) -> Swift.Void)?) -> Self
+  public class func once(queue: Dispatch.DispatchQueue?, after: Swift.Double, handler: ((QRTCRoomClient.GCDTimer) -> Swift.Void)?) -> Self
+  public class func every(interval: Swift.Double, handler: ((QRTCRoomClient.GCDTimer) -> Swift.Void)?) -> Self
+  public class func every(interval: Swift.Double, repeatTimes: Swift.Int, handler: ((QRTCRoomClient.GCDTimer) -> Swift.Void)?) -> Self
+  public class func every(queue: Dispatch.DispatchQueue?, after: Swift.Double, interval: Swift.Double, repeatTimes: Swift.Int, handler: ((QRTCRoomClient.GCDTimer) -> Swift.Void)?) -> Self
+  public func fire()
+  public func pause()
+  public func cancel()
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers final public class InAppScreenCapturer : QRTCSDK.RTCVideoCapturer {
+  public static let shared: QRTCRoomClient.InAppScreenCapturer
+  final public func startCapture()
+  final public func stopCapture()
+  @objc deinit
+}
+public enum MediaError : Swift.Error {
+  case CAMERA_DEVICE_NOT_FOUND
+  case AUDIO_INPUT_NOT_AVAILABLE
+  public static func == (a: QRTCRoomClient.MediaError, b: QRTCRoomClient.MediaError) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public enum protooErrorCode : Swift.Int {
+  case requestTimeout
+  case requestClosed
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+public enum protooErrors : Swift.Error {
+  case rtcError(Swift.Int, Swift.String)
+  case anotherError(QRTCRoomClient.protooErrorCode, Swift.String)
+}
+@objc @_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) open class QRTCVideoView : QRTCSDK.RTCMTLVideoView {
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func renderFrame(_ frame: QRTCSDK.RTCVideoFrame?)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(frame: CoreFoundation.CGRect)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers open class Retry {
+  public enum Strategy {
+    case immediate
+    case delay(seconds: Swift.Double)
+    case custom(closure: (_ currentIteration: Swift.Int, _ lastDelay: Foundation.TimeInterval?) -> Foundation.TimeInterval?)
+  }
+  @objc deinit
+  @discardableResult
+  public func finalCatch(_ handler: @escaping ((Swift.Error) -> Swift.Void)) -> Self
+  @discardableResult
+  public func finalDefer(_ handler: @escaping (() -> Swift.Void)) -> Self
+}
+@discardableResult
+public func retry(max: Swift.Int = 3, retryStrategy: QRTCRoomClient.Retry.Strategy = .immediate, _ closure: @escaping () throws -> Swift.Void) -> QRTCRoomClient.Retry
+@discardableResult
+public func retryAsync(max: Swift.Int = 3, retryStrategy: QRTCRoomClient.Retry.Strategy = .immediate, _ closure: @escaping () throws -> Swift.Void) -> QRTCRoomClient.Retry
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class RoomClient : ObjectiveC.NSObject {
+  public struct ConsumerAndRequestInfo {
+  }
+  public var roomListener: QRTCRoomClient.RoomListener?
+  public class func sharedInstance() -> QRTCRoomClient.RoomClient
+  public class func destroySharedIntance()
+  public func enterRoom(params: QRTCRoomClient.QRTCParams, scene: QRTCRoomClient.QRTCScene) -> Swift.Bool
+  public func cleanStatus()
+  public func exitRoom()
+  public func changeDisplayName(newName: Swift.String)
+  public func setDefaultStreamRecvMode(autoRecvAudio: Swift.Bool, autoRecvVideo: Swift.Bool)
+  public func startLocalPreview(frontCamera: Swift.Bool, view: QRTCRoomClient.QRTCVideoView)
+  public func startLocalShare(view: QRTCRoomClient.QRTCVideoView)
+  public func stopLocalPreview()
+  public func muteLocalVideo(mute: Swift.Bool)
+  public func startLocalAudio(mute: Swift.Bool)
+  public func stopLocalAudio()
+  public func muteLocalAudio(mute: Swift.Bool)
+  public func muteRemoteVideo(userId: Swift.String, mute: Swift.Bool)
+  public func muteRemoteShare(userId: Swift.String, mute: Swift.Bool)
+  public func setVideoEncoderParam(param: QRTCRoomClient.QRTCVideoEncParams)
+  public func setVideoResolution(resolution: QRTCRoomClient.QRTCVideoResolution)
+  public func setVideoFPS(fps: Swift.Int)
+  public func enableMultiVideoStream(enable: Swift.Bool, withQuality smallVideoEncParam: QRTCRoomClient.QRTCVideoEncParams) -> Swift.Int
+  public func setRemoteVideoStreamType(type: QRTCRoomClient.QRTCVideoStreamType)
+  public func startRemoteVideo(userId: Swift.String, view: QRTCRoomClient.QRTCVideoView?)
+  public func updateRemoteVideo(userId: Swift.String, view: QRTCRoomClient.QRTCVideoView)
+  public func startRemoteAudio(userId: Swift.String)
+  public func removeVideoView(userId: Swift.String, view: QRTCRoomClient.QRTCVideoView)
+  public func startRemoteShare(userId: Swift.String, view: QRTCRoomClient.QRTCVideoView)
+  public func stopRemoteVideo(userId: Swift.String)
+  public func stopRemoteShare(userId: Swift.String)
+  public func stopAllRemoteView()
+  public func setViewFillMode(mode: QRTCRoomClient.QRTCVideoFillMode)
+  public func setLocalViewMirror(_ mirrorType: QRTCRoomClient.QRTCLocalVideoMirrorType)
+  public func setRemoteViewFillMode(userId: Swift.String, mode: QRTCRoomClient.QRTCVideoFillMode)
+  public func muteAllRemoteViews(mute: Swift.Bool)
+  public func muteAllRemoteAudios(mute: Swift.Bool)
+  public func muteRemoteAudio(userId: Swift.String, mute: Swift.Bool)
+  public func setAudioCaptureVolume(_ volume: Swift.Int)
+  public func setAudioPlayoutVolume(volume: Swift.Int)
+  public func startAudioRecording(filePath: Swift.String)
+  public func stopAudioRecording()
+  public func setSpeaker(_ isUseSpeaker: Swift.Bool)
+  public func switchCamera()
+  public func setZoom(distance: Swift.Float)
+  public func enableTorch(enable: Swift.Bool) -> Swift.Bool
+  public func setFocusPosition(touchPoint: CoreFoundation.CGPoint)
+  public func startScreenCaptureInApp(encParams: QRTCRoomClient.QRTCVideoEncParams)
+  public func startScreenCaptureByReplaykit(encParams: QRTCRoomClient.QRTCVideoEncParams, appGroup: Swift.String)
+  public func startScreenCapture(view: QRTCRoomClient.QRTCVideoView) -> Swift.Int
+  public func stopScreenCapture() -> Swift.Int
+  public func pauseScreenCapture() -> Swift.Int
+  public func resumeScreenCapture() -> Swift.Int
+  public func startRemoteSubStreamView(userId: Swift.String, view: QRTCRoomClient.QRTCVideoView)
+  public func stopRemoteSubStreamView(userId: Swift.String)
+  @objc @_inheritsConvenienceInitializers public class ConsumerHandler : ObjectiveC.NSObject, QRTCSDK.ConsumerListener {
+    @objc public func onTransportClose(_ consumer: QRTCSDK.Consumer!)
+    @objc override dynamic public init()
+    @objc deinit
+  }
+  @objc deinit
+}
+public enum RoomState {
+  case none
+  case joining
+  case joined
+  case leaving
+  case leaved
+  public static func == (a: QRTCRoomClient.RoomState, b: QRTCRoomClient.RoomState) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class RoomClient100 : ObjectiveC.NSObject {
+  @_hasMissingDesignatedInitializers public class ConsumerAndRequestInfo {
+    @objc deinit
+  }
+  @_hasMissingDesignatedInitializers public class RecvTransportInfo {
+    @objc deinit
+  }
+  public var roomListener: QRTCRoomClient.RoomListener?
+  public var peerListPageMode: Swift.Int
+  public class func sharedInstance() -> QRTCRoomClient.RoomClient100
+  public class func destroySharedIntance()
+  public func roomState() -> QRTCRoomClient.RoomState
+  public func getRtpCapabilities(_ rtpCapabilities: Swift.String) -> SwiftyJSON.JSON?
+  public func enterRoom(params: QRTCRoomClient.QRTCParams, scene: QRTCRoomClient.QRTCScene) -> Swift.Bool
+  public func tryToDisconnectWS()
+  public func cleanStatus()
+  public func exitRoom(_ silence: Swift.Bool = false, completion: @escaping (Swift.Bool, Swift.String) -> Swift.Void)
+  public func sendCustomCmdMsg(cmdId: Swift.Int, data: Swift.String)
+  public func changeDisplayName(newName: Swift.String)
+  public func startLocalPreview(frontCamera: Swift.Bool, view: QRTCRoomClient.QRTCVideoView? = nil, completion: @escaping (Swift.Bool, Swift.String) -> Swift.Void)
+  public func updateLocalView(view: QRTCRoomClient.QRTCVideoView)
+  public func setAutoFitView(view: UIKit.UIView, qrtcVideoView: QRTCRoomClient.QRTCVideoView)
+  public func stopLocalPreview(completion: @escaping (Swift.Bool, Swift.String) -> Swift.Void)
+  public func muteLocalVideo(mute: Swift.Bool, completion: @escaping (Swift.Bool, Swift.String) -> Swift.Void)
+  public func muteRemoteVideo(userId: Swift.String, mute: Swift.Bool, completion: @escaping (Swift.Bool, Swift.String) -> Swift.Void)
+  public func muteAllRemoteViews(mute: Swift.Bool)
+  public func muteAllRemoteAudios(mute: Swift.Bool)
+  public func muteRemoteShare(userId: Swift.String, mute: Swift.Bool)
+  public func setVideoEncoderParam(param: QRTCRoomClient.QRTCVideoEncParams)
+  public func setVideoResolution(resolution: QRTCRoomClient.QRTCVideoResolution)
+  public func setVideoFPS(fps: Swift.Int)
+  public func enableMultiVideoStreams(enable: Swift.Bool, withQuality smallVideoEncParam: QRTCRoomClient.QRTCVideoEncParams) -> Swift.Int
+  public func setRemoteVideoQuality(type: QRTCRoomClient.QRTCVideoStreamType)
+  public func startRemoteVideo(userId: Swift.String, view: QRTCRoomClient.QRTCVideoView? = nil, completion: @escaping (Swift.Bool, Swift.String) -> Swift.Void)
+  public func updateRemoteVideo(userId: Swift.String, view: QRTCRoomClient.QRTCVideoView)
+  public func startRemoteAudio(userId: Swift.String, repeatTime: Swift.Int? = nil, completion: @escaping (Swift.Bool, Swift.String) -> Swift.Void)
+  public func stopRemoteAudio(userId: Swift.String, completion: @escaping (Swift.Bool, Swift.String) -> Swift.Void)
+  public func startRemoteShare(userId: Swift.String, view: QRTCRoomClient.QRTCVideoView? = nil, completion: @escaping (Swift.Bool, Swift.String) -> Swift.Void)
+  public func updateRemoteShare(userId: Swift.String, view: QRTCRoomClient.QRTCVideoView)
+  public func stopRemoteVideo(userId: Swift.String, completion: @escaping (Swift.Bool, Swift.String) -> Swift.Void)
+  public func stopRemoteShare(userId: Swift.String)
+  public func startAllRemoteViews(completion: @escaping (Swift.Bool, Swift.String) -> Swift.Void)
+  public func stopAllRemoteViews(completion: @escaping (Swift.Bool, Swift.String) -> Swift.Void)
+  public func setViewFillMode(mode: QRTCRoomClient.QRTCVideoFillMode)
+  public func setLocalViewMirror(_ mirrorType: QRTCRoomClient.QRTCLocalVideoMirrorType)
+  public func setRemoteViewFillMode(userId: Swift.String, mode: QRTCRoomClient.QRTCVideoFillMode)
+  public func startLocalAudio(mute: Swift.Bool, completion: @escaping (Swift.Bool) -> Swift.Void)
+  public func stopLocalAudio(completion: @escaping (Swift.Bool) -> Swift.Void)
+  public func muteLocalAudio(mute: Swift.Bool, completion: @escaping (Swift.Bool) -> Swift.Void)
+  public func muteRemoteAudio(userId: Swift.String, mute: Swift.Bool)
+  public func setAudioCaptureVolume(_ volume: Swift.Int)
+  public func setAudioPlayoutVolume(volume: Swift.Int)
+  public func getAudioPlayoutVolume(volume: Swift.Int)
+  public func startAudioRecording(filePath: Swift.String)
+  public func stopAudioRecording()
+  public func getSpeaker(completion: @escaping (Swift.Bool) -> Swift.Void)
+  public func isHeadsetPluggedIn() -> Swift.Bool
+  public func setSpeaker(_ isUseSpeaker: Swift.Bool)
+  public func switchCamera()
+  public func setZoom(distance: Swift.Float)
+  public func enableTorch(enable: Swift.Bool) -> Swift.Bool
+  public func setFocusPosition(touchPoint: CoreFoundation.CGPoint)
+  public func startScreenCaptureInApp(encParams: QRTCRoomClient.QRTCVideoEncParams)
+  public func startScreenCaptureByReplaykit(encParams: QRTCRoomClient.QRTCVideoEncParams, appGroup: Swift.String, extensionID: Swift.String)
+  public func stopScreenCaptureByReplaykit()
+  public func startScreenCapture(view: QRTCRoomClient.QRTCVideoView? = nil) -> Swift.Int
+  public func stopScreenCapture() -> Swift.Int
+  public func pauseScreenCapture() -> Swift.Int
+  public func resumeScreenCapture() -> Swift.Int
+  public func getPageUserInfo(pageNo: Swift.Int)
+  public func printToUpLevel(_ logMsg: Swift.String)
+  public func testRecreateTransport()
+  public func reCreateTransport(transportId: Swift.String, completion: @escaping (Swift.Bool, Swift.String) -> Swift.Void)
+  @objc deinit
+}
+extension QRTCRoomClient.RoomClient100 {
+  @objc @_hasMissingDesignatedInitializers public class SendTransportHandler : ObjectiveC.NSObject, QRTCSDK.SendTransportListener {
+    @objc public func onConnect(_ transport: QRTCSDK.Transport!, dtlsParameters: Swift.String!)
+    @objc public func onConnectionStateChange(_ transport: QRTCSDK.Transport!, connectionState: Swift.String!)
+    @objc public func onProduce(_ transport: QRTCSDK.Transport!, kind: Swift.String!, rtpParameters: Swift.String!, appData: Swift.String!, callback: ((Swift.String?) -> Swift.Void)!)
+    @objc deinit
+  }
+  @objc @_hasMissingDesignatedInitializers public class RecvTransportHandler : ObjectiveC.NSObject, QRTCSDK.RecvTransportListener {
+    @objc public func onConnect(_ transport: QRTCSDK.Transport!, dtlsParameters: Swift.String!)
+    @objc public func onConnectionStateChange(_ transport: QRTCSDK.Transport!, connectionState: Swift.String!)
+    @objc deinit
+  }
+  @objc @_hasMissingDesignatedInitializers public class ProducerHandler : ObjectiveC.NSObject, QRTCSDK.ProducerListener {
+    @objc public func onTransportClose(_ producer: QRTCSDK.Producer!)
+    @objc deinit
+  }
+  @objc @_hasMissingDesignatedInitializers public class ConsumerHandler : ObjectiveC.NSObject, QRTCSDK.ConsumerListener {
+    @objc public func onTransportClose(_ consumer: QRTCSDK.Consumer!)
+    @objc deinit
+  }
+}
+public protocol RoomListener {
+  func onEnterRoom(result: Swift.Int64, reason: Swift.String?)
+  func onExitRoom(reason: Swift.Int)
+  func onRemoteUserEnterRoom(userId: Swift.String, userInfo: QRTCRoomClient.QRTCUserInfo)
+  func onRemoteUserLeaveRoom(userId: Swift.String, reason: Swift.Int)
+  func onUserVideoAvailable(userId: Swift.String, available: Swift.Bool)
+  func onUserAudioAvailable(userId: Swift.String, available: Swift.Bool)
+  func onUserShareAvailable(userId: Swift.String, available: Swift.Bool, paused: Swift.Bool?)
+  func onScreenCaptureStarted()
+  func onScreenCapturePaused(reason: Swift.Int32)
+  func onScreenCaptureResumed(reason: Swift.Int32)
+  func onScreenCaptureStoped(reason: Swift.Int32)
+  func onNetworkQuality(localQuality: QRTCRoomClient.QRTCQuality, remoteQuality: QRTCRoomClient.QRTCQuality)
+  func onLocalVideoStats(stats: QRTCRoomClient.QRTCRealTimeStats)
+  func onLocalAudioStats(stats: QRTCRoomClient.QRTCRealTimeStats)
+  func onRemoteVideoStats(userId: Swift.String, stats: QRTCRoomClient.QRTCRealTimeStats)
+  func onRemoteAudioStats(userId: Swift.String, stats: QRTCRoomClient.QRTCRealTimeStats)
+  func onMediasoupError(errorMessage: Swift.String)
+  func onAudioRouteChanged(route: QRTCRoomClient.QRTCAudioRoute, fromRoute: QRTCRoomClient.QRTCAudioRoute)
+  func onUserSpeaking(userId: Swift.String, action: Swift.String)
+  func onPageUserInfo(userCount: Swift.Int, pageCount: Swift.Int, currentPage: Swift.Int, currentUserCount: Swift.Int)
+  func onCustomCommand(_ command: Swift.String)
+  func onDisplayNameChanged(userId: Swift.String, displayName: Swift.String)
+  func onSDKLog(_ logMsg: Swift.String)
+  func onConnectionLost()
+  func onTryToReconnect()
+  func onConnectionRecovery()
+  func onConnectionTimeout()
+  func onErrorMsg(errorCode: Swift.Int, errorMsg: Swift.String)
+  func onWarningMsg(warningMsg: Swift.String)
+  func onRecvCustomCmdMsg(peerId: Swift.String, cmdId: Swift.Int, seq: Swift.Int, data: Swift.String)
+}
+public struct ResolutionInfo {
+  public var resWidth: Swift.Int
+  public var resHeight: Swift.Int
+  public var canScaleDown: Swift.Bool
+  public var scaleDownBy: Swift.Int
+  public var maxUpBitrate: Swift.Int
+  public var maxDownBitrate: Swift.Int
+}
+public enum QRTCQuality : Swift.Int {
+  case QRTCQuality_Unknown
+  case QRTCQuality_Excellent
+  case QRTCQuality_Good
+  case QRTCQuality_Poor
+  case QRTCQuality_Bad
+  case QRTCQuality_Vbad
+  case QRTCQuality_Down
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+public struct QRTCQualityInfo {
+  public var userId: Swift.String?
+  public var quality: QRTCRoomClient.QRTCQuality?
+}
+public enum QRTCVideoResolutionMode {
+  case QRTCVideoResolutionModeLandscape
+  case QRTCVideoResolutionModePortrait
+  public static func == (a: QRTCRoomClient.QRTCVideoResolutionMode, b: QRTCRoomClient.QRTCVideoResolutionMode) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public enum QRTCVideoStreamType {
+  case QRTCVideoStreamTypeBig
+  case QRTCVideoStreamTypeSmall
+  case QRTCVideoStreamTypeSub
+  public static func == (a: QRTCRoomClient.QRTCVideoStreamType, b: QRTCRoomClient.QRTCVideoStreamType) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public enum QRTCVideoFillMode {
+  case QRTCVideoFillMode_Fill
+  case QRTCVideoFillMode_Fit
+  public static func == (a: QRTCRoomClient.QRTCVideoFillMode, b: QRTCRoomClient.QRTCVideoFillMode) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public enum QRTCLocalVideoMirrorType {
+  case enable
+  case disable
+  public static func == (a: QRTCRoomClient.QRTCLocalVideoMirrorType, b: QRTCRoomClient.QRTCLocalVideoMirrorType) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public enum QRTCAudioQuality {
+  case low
+  case medium
+  case high
+  public static func == (a: QRTCRoomClient.QRTCAudioQuality, b: QRTCRoomClient.QRTCAudioQuality) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public enum QRTCVideoResolution : Swift.Int {
+  case QRTCVideoResolution_120_120
+  case QRTCVideoResolution_160_160
+  case QRTCVideoResolution_270_270
+  case QRTCVideoResolution_480_480
+  case QRTCVideoResolution_160_120
+  case QRTCVideoResolution_240_180
+  case QRTCVideoResolution_280_210
+  case QRTCVideoResolution_320_240
+  case QRTCVideoResolution_400_300
+  case QRTCVideoResolution_480_360
+  case QRTCVideoResolution_640_480
+  case QRTCVideoResolution_960_720
+  case QRTCVideoResolution_160_90
+  case QRTCVideoResolution_256_144
+  case QRTCVideoResolution_320_180
+  case QRTCVideoResolution_480_270
+  case QRTCVideoResolution_640_360
+  case QRTCVideoResolution_960_540
+  case QRTCVideoResolution_1280_720
+  case QRTCVideoResolution_1920_1080
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+public struct QRTCParams {
+  public var serverUrl: Swift.String
+  public var sdkAppId: Swift.String
+  public var userSig: Swift.String
+  public var userId: Swift.String
+  public var userName: Swift.String
+  public var roomId: Swift.String
+  public var isAudioOn: Swift.Bool
+  public var isVideoOn: Swift.Bool
+  public var isSpeakerOn: Swift.Bool
+  public var xConferenceToken: Swift.String
+  public var acceptLanguage: Swift.String
+  public var maxRetryTime: Swift.Int
+  public var avatarUrl: Swift.String
+  public var preferedCodec: QRTCRoomClient.QRTCPreferedVideoCodec
+  public var appVersion: Swift.String
+  public init()
+  public init(serverUrl: Swift.String, sdkAppId: Swift.String, userSig: Swift.String, userId: Swift.String, userName: Swift.String, roomId: Swift.String, isAudioOn: Swift.Bool = false, isVideoOn: Swift.Bool = false, isSpeakerOn: Swift.Bool = false, maxRetryTime: Swift.Int = 90, acceptLanguage: Swift.String, avatarUrl: Swift.String = "", preferedCodec: QRTCRoomClient.QRTCPreferedVideoCodec = .H264, appVersion: Swift.String = "1.0.0")
+}
+public struct QRTCUserInfo {
+  public var displayName: Swift.String
+  public var avatarUrl: Swift.String
+  public var enterTime: Swift.Int64
+}
+public struct QRTCVideoEncParams {
+  public var videoResolution: QRTCRoomClient.QRTCVideoResolution
+  public var resMode: QRTCRoomClient.QRTCVideoResolutionMode
+  public var videoFps: Swift.Int
+  public var minVideoBitrate: Swift.Int
+  public var maxVideoBitrate: Swift.Int
+  public var enableAdjustRes: Swift.Bool?
+  public init(videoResolution: QRTCRoomClient.QRTCVideoResolution, resMode: QRTCRoomClient.QRTCVideoResolutionMode, videoFps: Swift.Int, minVideoBitrate: Swift.Int, maxVideoBitrate: Swift.Int, enableAdjustRes: Swift.Bool? = nil)
+}
+public enum QRTCScene {
+  case VideoCall
+  case AudioCall
+  case MCUCall
+  public static func == (a: QRTCRoomClient.QRTCScene, b: QRTCRoomClient.QRTCScene) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public enum QRTCPreferedVideoCodec {
+  case H264
+  case H265
+  case AV1
+  case VP9
+  public static func == (a: QRTCRoomClient.QRTCPreferedVideoCodec, b: QRTCRoomClient.QRTCPreferedVideoCodec) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public enum RoomError : Swift.Error {
+  case DEVICE_NOT_LOADED
+  case SEND_TRANSPORT_NOT_CREATED
+  case RECV_TRANSPORT_NOT_CREATED
+  case DEVICE_CANNOT_PRODUCE_VIDEO
+  case DEVICE_CANNOT_PRODUCE_AUDIO
+  case PRODUCER_NOT_FOUND
+  case CONSUMER_NOT_FOUND
+  public static func == (a: QRTCRoomClient.RoomError, b: QRTCRoomClient.RoomError) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public enum MediasoupError : Swift.Error {
+  case DeviceLoadError
+  case WebSocketError
+  public static func == (a: QRTCRoomClient.MediasoupError, b: QRTCRoomClient.MediasoupError) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+@_hasMissingDesignatedInitializers public class NeedConsumeInfo {
+  public var peerId: Swift.String
+  public var producerId: Swift.String
+  public var kind: Swift.String
+  public var appData: SwiftyJSON.JSON
+  @objc deinit
+}
+public struct QRTCRealTimeStats {
+  public var networkQuality: Swift.Int
+  public var audioVolume: Swift.Int
+  public var videoResolution: Swift.String
+  public var videoFrameRate: Swift.Int
+  public var videoBitrate: Swift.Int
+  public var audioChannels: Swift.Int
+  public var audioSampleRate: Swift.Int
+  public var audioBitrate: Swift.Int
+}
+public enum QRTCAudioRoute {
+  case speaker
+  case earpiece
+  case headset
+  public static func == (a: QRTCRoomClient.QRTCAudioRoute, b: QRTCRoomClient.QRTCAudioRoute) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+@_hasMissingDesignatedInitializers public class QRTCConsumer {
+  public var consumer: QRTCSDK.Consumer?
+  public var videoView: QRTCRoomClient.QRTCVideoView?
+  public var userId: Swift.String
+  public var kind: Swift.String
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers final public class ScreenCapturer : QRTCSDK.RTCVideoCapturer {
+  public static let shared: QRTCRoomClient.ScreenCapturer
+  final public func startCapture()
+  final public func stopCapture()
+  @objc deinit
+}
+extension QRTCRoomClient.GCDTimer.GCDTimerState : Swift.Equatable {}
+extension QRTCRoomClient.GCDTimer.GCDTimerState : Swift.Hashable {}
+extension QRTCRoomClient.MediaError : Swift.Equatable {}
+extension QRTCRoomClient.MediaError : Swift.Hashable {}
+extension QRTCRoomClient.protooErrorCode : Swift.Equatable {}
+extension QRTCRoomClient.protooErrorCode : Swift.Hashable {}
+extension QRTCRoomClient.protooErrorCode : Swift.RawRepresentable {}
+extension QRTCRoomClient.RoomState : Swift.Equatable {}
+extension QRTCRoomClient.RoomState : Swift.Hashable {}
+extension QRTCRoomClient.QRTCQuality : Swift.Equatable {}
+extension QRTCRoomClient.QRTCQuality : Swift.Hashable {}
+extension QRTCRoomClient.QRTCQuality : Swift.RawRepresentable {}
+extension QRTCRoomClient.QRTCVideoResolutionMode : Swift.Equatable {}
+extension QRTCRoomClient.QRTCVideoResolutionMode : Swift.Hashable {}
+extension QRTCRoomClient.QRTCVideoStreamType : Swift.Equatable {}
+extension QRTCRoomClient.QRTCVideoStreamType : Swift.Hashable {}
+extension QRTCRoomClient.QRTCVideoFillMode : Swift.Equatable {}
+extension QRTCRoomClient.QRTCVideoFillMode : Swift.Hashable {}
+extension QRTCRoomClient.QRTCLocalVideoMirrorType : Swift.Equatable {}
+extension QRTCRoomClient.QRTCLocalVideoMirrorType : Swift.Hashable {}
+extension QRTCRoomClient.QRTCAudioQuality : Swift.Equatable {}
+extension QRTCRoomClient.QRTCAudioQuality : Swift.Hashable {}
+extension QRTCRoomClient.QRTCVideoResolution : Swift.Equatable {}
+extension QRTCRoomClient.QRTCVideoResolution : Swift.Hashable {}
+extension QRTCRoomClient.QRTCVideoResolution : Swift.RawRepresentable {}
+extension QRTCRoomClient.QRTCScene : Swift.Equatable {}
+extension QRTCRoomClient.QRTCScene : Swift.Hashable {}
+extension QRTCRoomClient.QRTCPreferedVideoCodec : Swift.Equatable {}
+extension QRTCRoomClient.QRTCPreferedVideoCodec : Swift.Hashable {}
+extension QRTCRoomClient.RoomError : Swift.Equatable {}
+extension QRTCRoomClient.RoomError : Swift.Hashable {}
+extension QRTCRoomClient.MediasoupError : Swift.Equatable {}
+extension QRTCRoomClient.MediasoupError : Swift.Hashable {}
+extension QRTCRoomClient.QRTCAudioRoute : Swift.Equatable {}
+extension QRTCRoomClient.QRTCAudioRoute : Swift.Hashable {}

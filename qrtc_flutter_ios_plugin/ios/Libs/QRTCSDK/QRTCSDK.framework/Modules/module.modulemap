@@ -1,0 +1,6 @@
+framework module QRTCSDK {
+  umbrella header "QRTCSDK-umbrella.h"
+
+  export *
+  module * { export * }
+}

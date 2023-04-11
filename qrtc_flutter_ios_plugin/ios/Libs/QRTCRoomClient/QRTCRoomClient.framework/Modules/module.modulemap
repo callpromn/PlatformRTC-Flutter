@@ -1,0 +1,11 @@
+framework module QRTCRoomClient {
+  umbrella header "QRTCRoomClient-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module QRTCRoomClient.Swift {
+  header "QRTCRoomClient-Swift.h"
+  requires objc
+}
