@@ -6,7 +6,7 @@ class QrtcFlutterIosPlugin {
     return QrtcFlutterIosPluginPlatform.instance.getPlatformVersion();
   }
 
-  static const MethodChannel _channel = const MethodChannel('qrtc_flutter_ios_plugin');
+  static const MethodChannel _channel = MethodChannel('qrtc_flutter_ios_plugin');
 
   static Future<bool> createOrEnterRoom({
     required String serverUrl,
@@ -22,7 +22,9 @@ class QrtcFlutterIosPlugin {
       'sdkAppId': sdkAppId,
       'userSig': userSig,
       'userId': userId,
+      // 'userId': '${roomId}_$userId',
       'userName': userName,
+      // 'roomId': '${sdkAppId}_$roomId',
       'roomId': roomId,
       'acceptLanguage': acceptLanguage,
     });

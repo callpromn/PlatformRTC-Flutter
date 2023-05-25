@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
   s.dependency 'HydraAsync'
   s.dependency 'Starscream'
 
-  s.vendored_frameworks = 'QRTCRoomClient.framework'
+  s.static_framework = true
 end
 
 

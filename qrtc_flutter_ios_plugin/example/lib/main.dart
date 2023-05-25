@@ -5,7 +5,42 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool _isConnecting = false;
+  bool _isEnteredToRoom = false;
+
+  void _connectToRoom() async {
+    setState(() {
+      _isConnecting = true;
+      _isEnteredToRoom = false;
+    });
+
+    final success = await QrtcFlutterIosPlugin.createOrEnterRoom(
+      serverUrl: "rtc.callpro.mn/websocket",
+      sdkAppId: "vLFiFqMbXXk1GCqJVtySqn",
+      userSig: "",
+      userId: "test01_1111",
+      userName: "iOSTest02",
+      roomId: "vLFiFqMbXXk1GCqJVtySqn_test01",
+      acceptLanguage: "zh-CN",
+    );
+
+    setState(() {
+      _isConnecting = false;
+      _isEnteredToRoom = true;
+
+      if (!success) {
+        debugPrint('Failed to enter the room');
+        _isEnteredToRoom = false;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -15,23 +50,12 @@ class MyApp extends StatelessWidget {
         ),
         body: Center(
           child: ElevatedButton(
-            onPressed: () async {
-              final success = await QrtcFlutterIosPlugin.createOrEnterRoom(
-                serverUrl: "rtc.callpro.mn/websocket",
-                sdkAppId: "vLFiFqMbXXk1GCqJVtySqn",
-                userSig: "",
-                userId: "test_iostest1",
-                userName: "iOS Test 1",
-                roomId: "test",
-                acceptLanguage: "zh-CN",
-              );
-              if (success) {
-                print('Successfully entered the room');
-              } else {
-                print('Failed to enter the room');
-              }
-            },
-            child: Text('Enter Room'),
+            onPressed: _connectToRoom,
+            child: Text(_isConnecting
+                ? 'Connecting...'
+                : _isEnteredToRoom
+                    ? 'Leave Room'
+                    : 'Enter Room'),
           ),
         ),
       ),

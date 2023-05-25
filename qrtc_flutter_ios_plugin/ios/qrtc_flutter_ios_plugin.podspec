@@ -10,6 +10,7 @@ A Flutter plugin for QRTC
   s.author           = { 'Otgonbayar' => 'otgonbayar@callpro.mn' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
+  s.ios.deployment_target = '10.0'
   s.dependency 'Flutter'
   s.dependency 'Starscream', '~> 3.0.2'
   s.dependency 'SwiftyJSON', '~> 4.0'

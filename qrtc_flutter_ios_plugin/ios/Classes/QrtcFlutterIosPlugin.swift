@@ -3,11 +3,13 @@ import UIKit
 
 import QRTCSDK
 import QRTCRoomClient
+import Starscream
 
 typealias RoomClientSDK = RoomClient100
 
 public class QrtcFlutterIosPlugin: NSObject, FlutterPlugin, RoomListener {
-    
+
+    let logTag = "[QrtcFlutterIosPlugin]"
     var client: RoomClientSDK?
 
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -41,15 +43,45 @@ public class QrtcFlutterIosPlugin: NSObject, FlutterPlugin, RoomListener {
     func createOrEnterRoom(_ serverUrl: String, sdkAppId: String, userSig: String, userId: String, userName: String, roomId: String, acceptLanguage: String, callback: @escaping (Bool) -> Void) {
         self.client = RoomClientSDK.sharedInstance()
 
-        let rtcParams = QRTCParams(
+       /*  let rtcParams = QRTCParams(
             serverUrl: serverUrl,
             sdkAppId: sdkAppId,
             userSig: userSig,
             userId: userId,
             userName: userName,
             roomId: roomId,
-            acceptLanguage: acceptLanguage
-        )
+            acceptLanguage: acceptLanguage,
+            xConferenceToken: userSig
+
+      serverUrl: "rtc.callpro.mn/websocket",
+      sdkAppId: "vLFiFqMbXXk1GCqJVtySqn",
+      userSig: "",
+      userId: "test01_1111",
+      userName: "iOSTest02",
+      roomId: "vLFiFqMbXXk1GCqJVtySqn_test01",
+      acceptLanguage: "zh-CN",
+
+        ) */
+
+        /* 
+        config.serverUrl = serverUrl
+        config.sdkAppId = sdkAppId
+        config.userSig = userSig
+        config.userId = userId
+        config.userName = userName
+        config.roomId = roomId
+        config.acceptLanguage = acceptLanguage
+         */
+
+        var config = QRTCParams()
+        config.serverUrl = "rtc.callpro.mn/websocket"
+        config.sdkAppId = "vLFiFqMbXXk1GCqJVtySqn"
+        config.userSig = ""
+        config.userId = "test01_1111"
+        config.userName = "iOSTest01"
+        config.roomId = "vLFiFqMbXXk1GCqJVtySqn_test01"
+        config.acceptLanguage = "zh-CN"
+        config.xConferenceToken = "001eJxTYPipcfpB5fIJn07P5HovOUXt+dP9mtOZrnelfp+6SdDQYeJ+MYYyH7dMt0LfpIiIbEN350KvsJLK4MI8f6ny5Abjh4xt4VIsjAyMDCxADOIzgUlmMMkCJhUYzFPMjYzNTFOTLC2MTSxMjS3NU41TjdMsU0zMDJJSUhK5GIwsLIyMTQyNzI0B1NEu5w=="
 
         RoomClientSDK.sharedInstance().roomListener = self
 
@@ -63,52 +95,48 @@ public class QrtcFlutterIosPlugin: NSObject, FlutterPlugin, RoomListener {
         )
 
         RoomClientSDK.sharedInstance().setVideoEncoderParam(param: encoderParams)
-        RoomClientSDK.sharedInstance().enterRoom(params: rtcParams, scene: .VideoCall)
-
-        // Assuming the success flag is based on the onEnterRoom event
-        // Add a listener to handle the onEnterRoom event
-        self.onEnterRoomCompletion = { success in
-            callback(success)
+        RoomClientSDK.sharedInstance().enterRoom(params: config, scene: .VideoCall)
+    }
+    
+    public func onEnterRoom(result: Int64, reason: String?) {
+        print("\(logTag) on EnterRoom duration=\(result)")
+        RoomClientSDK.sharedInstance().startLocalAudio(mute: false){ [weak self]success in
+            if success {
+            }else{
+            }
         }
     }
     
-    private var onEnterRoomCompletion: ((Bool) -> Void)?
-    
-    public func onEnterRoom(result: Int64, reason: String?) {
-        onEnterRoomCompletion?(result == 0)
-        onEnterRoomCompletion = nil
-    }
-    
     public func onExitRoom(reason: Int) {
-        
+        print("\(logTag) on EnterRoom reason=\(reason)")
     }
     
     public func onRemoteUserEnterRoom(userId: String, userInfo: QRTCRoomClient.QRTCUserInfo) {
-        
+        print("\(logTag) onRemoteUserEnterRoom userId: \(String(describing: userId))")
     }
     
     public func onRemoteUserLeaveRoom(userId: String, reason: Int) {
-        
+        print("\(logTag) onRemoteUserLeaveRoom userId:\(String(describing: userId))")
     }
     
     public func onUserShareAvailable(userId: String, available: Bool, paused: Bool?) {
-        
+        print("\(logTag) onUserShareAvailable userId: \(String(describing: userId)), available: \(available)")
     }
     
     public func onScreenCaptureStarted() {
-        
+        debugPrint("log: onScreenCaptureStarted")
     }
     
     public func onScreenCapturePaused(reason: Int32) {
-        
+        debugPrint("log: onScreenCapturePaused: " + "\(reason)")
     }
     
     public func onScreenCaptureResumed(reason: Int32) {
-        
+        debugPrint("log: onScreenCaptureResumed: " + "\(reason)")
     }
     
     public func onScreenCaptureStoped(reason: Int32) {
-        
+        debugPrint("log: onScreenCaptureStoped: " + "\(reason)")
     }
     
     public func onNetworkQuality(localQuality: QRTCRoomClient.QRTCQuality, remoteQuality: QRTCRoomClient.QRTCQuality) {
@@ -132,7 +160,7 @@ public class QrtcFlutterIosPlugin: NSObject, FlutterPlugin, RoomListener {
     }
     
     public func onMediasoupError(errorMessage: String) {
-        
+        print("\(logTag) onMediasoupError errorMessage=\(errorMessage)")
     }
     
     public func onAudioRouteChanged(route: QRTCRoomClient.QRTCAudioRoute, fromRoute: QRTCRoomClient.QRTCAudioRoute) {
@@ -176,11 +204,11 @@ public class QrtcFlutterIosPlugin: NSObject, FlutterPlugin, RoomListener {
     }
     
     public func onErrorMsg(errorCode: Int, errorMsg: String) {
-        
+        print("\(logTag) onErrorMsg errorCode=\(errorCode), errorMsg=\(errorMsg)")
     }
     
     public func onWarningMsg(warningMsg: String) {
-        
+        print("\(logTag) onWarningMsg warningMsg=\(warningMsg)")
     }
     
     public func onRecvCustomCmdMsg(peerId: String, cmdId: Int, seq: Int, data: String) {
@@ -188,10 +216,17 @@ public class QrtcFlutterIosPlugin: NSObject, FlutterPlugin, RoomListener {
     }
     
     public func onUserVideoAvailable(userId: String, available: Bool) {
-        
+         print("\(logTag) onUserVideoAvailable userId: \(String(describing: userId)), available: \(available)")
     }
     
     public func onUserAudioAvailable(userId: String, available: Bool) {
-        
+         print("\(logTag) onUserAudioAvailable userId: \(String(describing: userId)), available: \(available)")
+         if available {
+            RoomClientSDK.sharedInstance().startRemoteAudio(userId:userId){ success,info in
+
+            }
+        }else{
+            //do nothing
+        }
     }
 }
