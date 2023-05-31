@@ -30,6 +30,8 @@
 	<string>Main</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Grant access to microphone</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Grant access to camera</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

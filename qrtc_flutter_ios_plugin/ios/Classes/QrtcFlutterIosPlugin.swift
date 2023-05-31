@@ -43,27 +43,15 @@ public class QrtcFlutterIosPlugin: NSObject, FlutterPlugin, RoomListener {
     func createOrEnterRoom(_ serverUrl: String, sdkAppId: String, userSig: String, userId: String, userName: String, roomId: String, acceptLanguage: String, callback: @escaping (Bool) -> Void) {
         self.client = RoomClientSDK.sharedInstance()
 
-       /*  let rtcParams = QRTCParams(
-            serverUrl: serverUrl,
-            sdkAppId: sdkAppId,
-            userSig: userSig,
-            userId: userId,
-            userName: userName,
-            roomId: roomId,
-            acceptLanguage: acceptLanguage,
-            xConferenceToken: userSig
+        var config = QRTCParams()
+        // config.serverUrl = "rtc.callpro.mn/websocket"
+        // config.sdkAppId = "vLFiFqMbXXk1GCqJVtySqn"
+        // config.userSig = ""
+        // config.userId = "test01_1111"
+        // config.userName = "iOSTest01"
+        // config.roomId = "vLFiFqMbXXk1GCqJVtySqn_test01"
+        // config.acceptLanguage = "zh-CN"
 
-      serverUrl: "rtc.callpro.mn/websocket",
-      sdkAppId: "vLFiFqMbXXk1GCqJVtySqn",
-      userSig: "",
-      userId: "test01_1111",
-      userName: "iOSTest02",
-      roomId: "vLFiFqMbXXk1GCqJVtySqn_test01",
-      acceptLanguage: "zh-CN",
-
-        ) */
-
-        /* 
         config.serverUrl = serverUrl
         config.sdkAppId = sdkAppId
         config.userSig = userSig
@@ -71,16 +59,6 @@ public class QrtcFlutterIosPlugin: NSObject, FlutterPlugin, RoomListener {
         config.userName = userName
         config.roomId = roomId
         config.acceptLanguage = acceptLanguage
-         */
-
-        var config = QRTCParams()
-        config.serverUrl = "rtc.callpro.mn/websocket"
-        config.sdkAppId = "vLFiFqMbXXk1GCqJVtySqn"
-        config.userSig = ""
-        config.userId = "test01_1111"
-        config.userName = "iOSTest01"
-        config.roomId = "vLFiFqMbXXk1GCqJVtySqn_test01"
-        config.acceptLanguage = "zh-CN"
         config.xConferenceToken = "001eJxTYPipcfpB5fIJn07P5HovOUXt+dP9mtOZrnelfp+6SdDQYeJ+MYYyH7dMt0LfpIiIbEN350KvsJLK4MI8f6ny5Abjh4xt4VIsjAyMDCxADOIzgUlmMMkCJhUYzFPMjYzNTFOTLC2MTSxMjS3NU41TjdMsU0zMDJJSUhK5GIwsLIyMTQyNzI0B1NEu5w=="
 
         RoomClientSDK.sharedInstance().roomListener = self

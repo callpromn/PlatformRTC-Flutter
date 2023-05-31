@@ -10,15 +10,20 @@ Pod::Spec.new do |s|
 
   s.source_files = 'Sources/**/*.{h,c,m,swift}'
 
-  s.ios.deployment_target = '10.0'
+  s.ios.deployment_target = '11.0'
   s.swift_version = '5.0'
+
+  s.pod_target_xcconfig = {
+    "VALID_ARCHS" => "$(ARCHS_STANDARD_64_BIT)",
+  }
 
   s.dependency 'QRTCSDK'
   s.dependency 'SwiftyJSON'
   s.dependency 'HydraAsync'
   s.dependency 'Starscream'
-
   s.static_framework = true
+
+  s.vendored_frameworks = 'QRTCRoomClient.framework'
 end
 
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qrtc_flutter_ios_plugin/qrtc_flutter_ios_plugin.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() {
   runApp(MyApp());
@@ -14,7 +15,42 @@ class _MyAppState extends State<MyApp> {
   bool _isConnecting = false;
   bool _isEnteredToRoom = false;
 
+  PermissionStatus _cameraPermissionStatus = PermissionStatus.denied;
+  PermissionStatus _microphonePermissionStatus = PermissionStatus.denied;
+
+  Future<void> _checkPermissions() async {
+    final cameraStatus = await Permission.camera.status;
+    final microphoneStatus = await Permission.microphone.status;
+
+    setState(() {
+      _cameraPermissionStatus = cameraStatus;
+      _microphonePermissionStatus = microphoneStatus;
+    });
+  }
+
+  Future<void> _requestPermissions() async {
+    final cameraStatus = await Permission.camera.request();
+    final microphoneStatus = await Permission.microphone.request();
+
+    setState(() {
+      _cameraPermissionStatus = cameraStatus;
+      _microphonePermissionStatus = microphoneStatus;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _checkPermissions();
+  }
+
   void _connectToRoom() async {
+    await _requestPermissions();
+
+    if (!_cameraPermissionStatus.isGranted || !_microphonePermissionStatus.isGranted) {
+      return;
+    }
+
     setState(() {
       _isConnecting = true;
       _isEnteredToRoom = false;
