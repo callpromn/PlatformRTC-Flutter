@@ -57,12 +57,12 @@ class _MyAppState extends State<MyApp> {
     });
 
     final success = await QrtcFlutterIosPlugin.createOrEnterRoom(
-      serverUrl: "rtc.callpro.mn/websocket",
+      serverUrl: "wss://rtc.callpro.mn/websocket",
       sdkAppId: "vLFiFqMbXXk1GCqJVtySqn",
       userSig: "",
-      userId: "test01_1111",
-      userName: "iOSTest02",
-      roomId: "vLFiFqMbXXk1GCqJVtySqn_test01",
+      userId: "111122223333_1111",
+      userName: "iOSTest1",
+      roomId: "vLFiFqMbXXk1GCqJVtySqn_111122223333",
       acceptLanguage: "zh-CN",
     );
 

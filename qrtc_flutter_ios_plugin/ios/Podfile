@@ -5,7 +5,7 @@ target 'qrtc_flutter_ios_plugin' do
     use_frameworks!
     use_modular_headers!
   
-    pod 'Starscream', '~> 3.0.2'
+    pod 'Starscream', '~> 4.0.0'
     pod 'SwiftyJSON', '~> 4.0'
     pod 'HydraAsync'
     pod 'RxSwift', '~> 5'
